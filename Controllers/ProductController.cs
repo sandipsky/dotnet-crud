@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using crud.Data;
 using crud.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 [Route("api/[controller]")]
@@ -22,7 +23,7 @@ public class ProductController : ControllerBase
         return Ok(Products);
     }
 
-    [HttpGet("view")]
+    [HttpGet("filter")]
     public async Task<ActionResult<object>> FilterProduct(
     [FromQuery] string sortBy,
     [FromQuery] string sortOrder,
@@ -153,4 +154,13 @@ public class ProductController : ControllerBase
 
         return Ok();
     }
+
+    [Authorize]    
+    [HttpGet("secret")]
+    public IActionResult Secret()
+    {
+        var response = new { message = "You are awesome" };
+        return Ok(response);
+    }
+   
 }
