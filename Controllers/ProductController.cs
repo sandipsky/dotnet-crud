@@ -35,13 +35,13 @@ public class ProductController : ControllerBase
     {
         IQueryable<Product> productsQuery = _context.Products;
 
-     
+
         if (!string.IsNullOrWhiteSpace(filterByName))
         {
             productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(filterByName.ToLower()));
         }
 
-     
+
         if (minPrice.HasValue || maxPrice.HasValue)
         {
             if (minPrice.HasValue && maxPrice.HasValue)
@@ -58,7 +58,7 @@ public class ProductController : ControllerBase
             }
         }
 
-        
+
         if (!string.IsNullOrWhiteSpace(sortBy))
         {
             switch (sortBy.ToLower())
@@ -73,7 +73,7 @@ public class ProductController : ControllerBase
                         ? productsQuery.OrderByDescending(p => p.Price)
                         : productsQuery.OrderBy(p => p.Price);
                     break;
-                    
+
             }
         }
 
@@ -118,12 +118,19 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(int id, Product ProductItem)
+    public async Task<IActionResult> UpdateProduct(long id, Product ProductItem)
     {
-        if (id != ProductItem.Id)
-            return BadRequest();
+        var existingProduct = _context.Products.Find(id);
 
-        _context.Entry(ProductItem).State = EntityState.Modified;
+        if (existingProduct == null)
+        {
+            return NotFound();
+        }
+
+        // Update the existingProduct with the values from ProductItem
+        // _context.Entry(ProductItem).State = EntityState.Modified;
+        existingProduct.Name = ProductItem.Name;
+        existingProduct.Price = ProductItem.Price;
 
         try
         {
@@ -131,10 +138,8 @@ public class ProductController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!_context.Products.Any(e => e.Id == id))
-                return NotFound();
-            else
-                throw;
+            // Handle concurrency conflicts if needed
+            return Conflict(); // HTTP 409 Conflict
         }
 
         return Ok();
@@ -155,12 +160,12 @@ public class ProductController : ControllerBase
         return Ok();
     }
 
-    [Authorize]    
+    [Authorize]
     [HttpGet("secret")]
     public IActionResult Secret()
     {
         var response = new { message = "You are awesome" };
         return Ok(response);
     }
-   
+
 }

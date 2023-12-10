@@ -24,7 +24,15 @@ builder.Services.AddDbContext<ProductContext>(opt =>
     opt.UseInMemoryDatabase("ProductList"));
 
 // For Identity
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    // Disable password requirements
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 1; 
+})
     .AddEntityFrameworkStores<ProductContext>()
     .AddDefaultTokenProviders();
 
