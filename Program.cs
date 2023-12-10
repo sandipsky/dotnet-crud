@@ -9,6 +9,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 // For DB Connection
 builder.Services.AddDbContext<ProductContext>(opt =>
     opt.UseInMemoryDatabase("ProductList"));
@@ -55,6 +65,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 // Authentication & Authorization
 app.UseAuthentication();
