@@ -8,9 +8,9 @@ namespace DotnetCrud.Services
     {
         private readonly IProductRepository _repository = repository;
 
-        public async Task<IEnumerable<ProductViewDTO>> GetProductsAsync()
+        public async Task<PagedResponse<ProductViewDTO>> GetProductsAsync(ProductFilter filter)
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllAsync(filter);
         }
 
         public async Task<ProductViewDTO> GetProductByIdAsync(int id)

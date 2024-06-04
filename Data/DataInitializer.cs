@@ -22,11 +22,20 @@ namespace DotnetCrud.Data
                     CategoryId INTEGER NOT NULL,
                     FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
                 );
+                
             ";
 
             tableCommand.ExecuteNonQuery();
         }
     }
+
+    // CREATE TABLE IF NOT EXISTS Users (
+    //                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //                 Name TEXT NOT NULL,
+    //                 Username TEXT NOT NULL UNIQUE,
+    //                 Email TEXT UNIQUE,
+    //                 Password TEXT NOT NULL,
+    //             );
 }
 
 

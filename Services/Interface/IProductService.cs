@@ -5,7 +5,7 @@ namespace DotnetCrud.Services
 {
     public interface IProductService
     {
-        Task<IEnumerable<ProductViewDTO>> GetProductsAsync();
+        Task<PagedResponse<ProductViewDTO>> GetProductsAsync(ProductFilter filter);
         Task<ProductViewDTO> GetProductByIdAsync(int id);
         Task<int> CreateProductAsync(Product product);
         Task<int> UpdateProductAsync(Product product);

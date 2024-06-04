@@ -2,8 +2,6 @@ using Dapper;
 using DotnetCrud.Data;
 using DotnetCrud.DTOs;
 using DotnetCrud.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DotnetCrud.Repositories
 {
@@ -11,17 +9,64 @@ namespace DotnetCrud.Repositories
     {
         private readonly DatabaseContext _context = context;
 
-        public async Task<IEnumerable<ProductViewDTO>> GetAllAsync()
+        public async Task<PagedResponse<ProductViewDTO>> GetAllAsync(ProductFilter filter)
         {
             using var connection = _context.CreateConnection();
-            var query = @"
+
+            var sql = @"
                 SELECT 
                     p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName
                 FROM 
                     Products p
                 INNER JOIN 
-                    Categories c ON p.CategoryId = c.Id";
-            return await connection.QueryAsync<ProductViewDTO>(query);
+                    Categories c ON p.CategoryId = c.Id
+                WHERE 
+                    1=1";
+
+            var countSql = "SELECT COUNT(*) FROM Products p WHERE 1=1";
+
+            if (!string.IsNullOrEmpty(filter.Name))
+            {
+                sql += " AND p.Name LIKE @Name";
+                countSql += " AND p.Name LIKE @Name";
+            }
+            if (filter.MinPrice.HasValue)
+            {
+                sql += " AND p.Price >= @MinPrice";
+                countSql += " AND p.Price >= @MinPrice";
+            }
+            if (filter.MaxPrice.HasValue)
+            {
+                sql += " AND p.Price <= @MaxPrice";
+                countSql += " AND p.Price <= @MaxPrice";
+            }
+            if (filter.CategoryId.HasValue)
+            {
+                sql += " AND p.CategoryId = @CategoryId";
+                countSql += " AND p.CategoryId = @CategoryId";
+            }
+
+            sql += $" ORDER BY p.{filter.SortBy} {filter.SortOrder}";
+            sql += " LIMIT @PageSize OFFSET @Offset";
+
+            var parameters = new
+            {
+                Name = $"%{filter.Name}%",
+                filter.MinPrice,
+                filter.MaxPrice,
+                filter.CategoryId,
+                filter.PageSize,
+                Offset = filter.PageIndex * filter.PageSize
+            };
+
+            var items = await connection.QueryAsync<ProductViewDTO>(sql, parameters);
+            var totalElements = await connection.ExecuteScalarAsync<int>(countSql, parameters);
+
+            return new PagedResponse<ProductViewDTO>
+            {
+                Items = items.ToList(),
+                TotalElements = totalElements
+            };
         }
 
         public async Task<ProductViewDTO> GetByIdAsync(int id)

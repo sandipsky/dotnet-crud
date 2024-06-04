@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DotnetCrud.Models;
 using DotnetCrud.Services;
+using DotnetCrud.DTOs;
 
 namespace DotnetCrud.Controllers
 {
@@ -16,9 +17,9 @@ namespace DotnetCrud.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] ProductFilter filter)
         {
-            var products = await _productService.GetProductsAsync();
+            var products = await _productService.GetProductsAsync(filter);
             return Ok(products);
         }
 
