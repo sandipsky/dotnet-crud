@@ -59,6 +59,13 @@ namespace DotnetCrud.Repositories
             return await connection.QuerySingleOrDefaultAsync<User>(query, new { Id = id });
         }
 
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            using var connection = _context.CreateConnection();
+            var query = "SELECT * FROM Users WHERE Username = @Username";
+            return await connection.QuerySingleOrDefaultAsync<User>(query, new { Username = username });
+        }
+
         public async Task<int> AddAsync(User user)
         {
             using var connection = _context.CreateConnection();

@@ -57,3 +57,12 @@ D:\Projects\Sandip\dotnet-crud\obj\Debug\net8.0\refint\dotnet-crud.dll
 D:\Projects\Sandip\dotnet-crud\obj\Debug\net8.0\dotnet-crud.pdb
 D:\Projects\Sandip\dotnet-crud\obj\Debug\net8.0\dotnet-crud.genruntimeconfig.cache
 D:\Projects\Sandip\dotnet-crud\obj\Debug\net8.0\ref\dotnet-crud.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\BCrypt.Net-Next.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\Projects\Sandip\dotnet-crud\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

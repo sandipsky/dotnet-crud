@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using DotnetCrud.Models;
 using DotnetCrud.Services;
 using DotnetCrud.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DotnetCrud.Controllers
 {
@@ -10,6 +11,27 @@ namespace DotnetCrud.Controllers
     public class UserController(IUserService userService) : ControllerBase
     {
         private readonly IUserService _userService = userService;
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Login([FromBody] LoginForm loginRequest)
+        {
+            var user = await _userService.LoginUserAsync(loginRequest.Username, loginRequest.Password);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var token = _userService.GenerateJwtToken(user);
+            return Ok(new LoginResponse
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Name = user.Name,
+                Email = user.Email,
+                Token = token,
+            });
+        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] UserFilter filter)

@@ -10,5 +10,7 @@ namespace DotnetCrud.Services
         Task<int> CreateUserAsync(User user);
         Task<int> UpdateUserAsync(User user);
         Task<int> DeleteUserAsync(int id);
+        Task<User> LoginUserAsync(string username, string password);
+        string GenerateJwtToken(User user);
     }
 }
