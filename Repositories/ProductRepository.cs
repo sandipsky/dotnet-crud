@@ -1,25 +1,42 @@
 using Dapper;
 using DotnetCrud.Data;
+using DotnetCrud.DTOs;
 using DotnetCrud.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DotnetCrud.Repositories
 {
-    public class ProductRepository(DatabaseContext context) : IRepository<Product>
+    public class ProductRepository(DatabaseContext context) : IProductRepository
     {
         private readonly DatabaseContext _context = context;
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<ProductViewDTO>> GetAllAsync()
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<Product>("SELECT * FROM Products");
+            var query = @"
+                SELECT 
+                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName
+                FROM 
+                    Products p
+                INNER JOIN 
+                    Categories c ON p.CategoryId = c.Id";
+            return await connection.QueryAsync<ProductViewDTO>(query);
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<ProductViewDTO> GetByIdAsync(int id)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Product>("SELECT * FROM Products WHERE Id = @Id", new { Id = id });
+            var query = @"
+                SELECT 
+                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName
+                FROM 
+                    Products p
+                INNER JOIN 
+                    Categories c ON p.CategoryId = c.Id
+                WHERE 
+                    p.Id = @Id";
+            return await connection.QuerySingleOrDefaultAsync<ProductViewDTO>(query, new { Id = id });
         }
 
         public async Task<int> AddAsync(Product product)

@@ -4,7 +4,7 @@ using DotnetCrud.Models;
 
 namespace DotnetCrud.Repositories
 {
-    public class CategoryRepository(DatabaseContext context) : IRepository<Category>
+    public class CategoryRepository(DatabaseContext context) : ICategoryRepository
     {
         private readonly DatabaseContext _context = context;
 

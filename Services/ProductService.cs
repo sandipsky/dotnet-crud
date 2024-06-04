@@ -1,23 +1,19 @@
+using DotnetCrud.DTOs;
 using DotnetCrud.Models;
 using DotnetCrud.Repositories;
 
 namespace DotnetCrud.Services
 {
-    public class ProductService : IProductService
+    public class ProductService(IProductRepository repository) : IProductService
     {
-        private readonly IRepository<Product> _repository;
+        private readonly IProductRepository _repository = repository;
 
-        public ProductService(IRepository<Product> repository)
-        {
-            _repository = repository;
-        }
-
-        public async Task<IEnumerable<Product>> GetProductsAsync()
+        public async Task<IEnumerable<ProductViewDTO>> GetProductsAsync()
         {
             return await _repository.GetAllAsync();
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<ProductViewDTO> GetProductByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
         }

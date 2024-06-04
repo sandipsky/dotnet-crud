@@ -3,14 +3,9 @@ using DotnetCrud.Repositories;
 
 namespace DotnetCrud.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService(ICategoryRepository repository) : ICategoryService
     {
-        private readonly IRepository<Category> _repository;
-
-        public CategoryService(IRepository<Category> repository)
-        {
-            _repository = repository;
-        }
+        private readonly ICategoryRepository _repository = repository;
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {

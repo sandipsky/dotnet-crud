@@ -13,8 +13,8 @@ string connectionString = "Data Source=dotnetcrud.db";
 DatabaseInitializer.Initialize(connectionString);
 
 builder.Services.AddSingleton(new DatabaseContext(connectionString));
-builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
-builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
