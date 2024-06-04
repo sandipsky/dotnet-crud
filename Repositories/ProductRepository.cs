@@ -9,7 +9,7 @@ namespace DotnetCrud.Repositories
     {
         private readonly DatabaseContext _context = context;
 
-        public async Task<PagedResponse<ProductViewDTO>> GetAllAsync(ProductFilter filter)
+        public async Task<IEnumerable<ProductViewDTO>> GetAllAsync(ProductFilter filter)
         {
             using var connection = _context.CreateConnection();
 
@@ -59,14 +59,14 @@ namespace DotnetCrud.Repositories
                 Offset = filter.PageIndex * filter.PageSize
             };
 
-            var items = await connection.QueryAsync<ProductViewDTO>(sql, parameters);
-            var totalElements = await connection.ExecuteScalarAsync<int>(countSql, parameters);
+            return await connection.QueryAsync<ProductViewDTO>(sql, parameters);           
+        }
 
-            return new PagedResponse<ProductViewDTO>
-            {
-                Items = items.ToList(),
-                TotalElements = totalElements
-            };
+        public async Task<int> CountAllAsync()
+        {
+            using var connection = _context.CreateConnection();
+            var sql = "SELECT COUNT(*) FROM Products";
+            return await connection.ExecuteScalarAsync<int>(sql);
         }
 
         public async Task<ProductViewDTO> GetByIdAsync(int id)

@@ -10,7 +10,13 @@ namespace DotnetCrud.Services
 
         public async Task<PagedResponse<ProductViewDTO>> GetProductsAsync(ProductFilter filter)
         {
-            return await _repository.GetAllAsync(filter);
+            var items = await _repository.GetAllAsync(filter);
+            var count = await _repository.CountAllAsync();
+            return new PagedResponse<ProductViewDTO>
+            {
+                Items = items.ToList(),
+                TotalElements = count
+            };
         }
 
         public async Task<ProductViewDTO> GetProductByIdAsync(int id)
