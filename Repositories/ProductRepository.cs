@@ -23,27 +23,21 @@ namespace DotnetCrud.Repositories
                 WHERE 
                     1=1";
 
-            var countSql = "SELECT COUNT(*) FROM Products p WHERE 1=1";
-
             if (!string.IsNullOrEmpty(filter.Name))
             {
                 sql += " AND p.Name LIKE @Name";
-                countSql += " AND p.Name LIKE @Name";
             }
             if (filter.MinPrice.HasValue)
             {
                 sql += " AND p.Price >= @MinPrice";
-                countSql += " AND p.Price >= @MinPrice";
             }
             if (filter.MaxPrice.HasValue)
             {
                 sql += " AND p.Price <= @MaxPrice";
-                countSql += " AND p.Price <= @MaxPrice";
             }
             if (filter.CategoryId.HasValue)
             {
                 sql += " AND p.CategoryId = @CategoryId";
-                countSql += " AND p.CategoryId = @CategoryId";
             }
 
             sql += $" ORDER BY p.{filter.SortBy} {filter.SortOrder}";
