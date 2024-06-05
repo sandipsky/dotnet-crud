@@ -9,7 +9,7 @@ namespace DotnetCrud.Repositories
     {
         private readonly DatabaseContext _context = context;
 
-        public async Task<IEnumerable<User>> GetAllAsync(UserFilter filter)
+        public async Task<IEnumerable<UserView>> GetAllAsync(UserFilter filter)
         {
             using var connection = _context.CreateConnection();
 
@@ -42,7 +42,7 @@ namespace DotnetCrud.Repositories
                 Offset = filter.PageIndex * filter.PageSize
             };
 
-            return await connection.QueryAsync<User>(sql, parameters);
+            return await connection.QueryAsync<UserView>(sql, parameters);
         }
 
         public async Task<int> CountAllAsync()
@@ -52,11 +52,11 @@ namespace DotnetCrud.Repositories
             return await connection.ExecuteScalarAsync<int>(sql);
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<UserView> GetByIdAsync(int id)
         {
             using var connection = _context.CreateConnection();
             var query = @"SELECT * FROM Users WHERE Id = @Id";
-            return await connection.QuerySingleOrDefaultAsync<User>(query, new { Id = id });
+            return await connection.QuerySingleOrDefaultAsync<UserView>(query, new { Id = id });
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)

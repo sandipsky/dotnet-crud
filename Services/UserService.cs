@@ -5,6 +5,7 @@ using DotnetCrud.DTOs;
 using DotnetCrud.Models;
 using DotnetCrud.Repositories;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 
 namespace DotnetCrud.Services
 {
@@ -13,18 +14,18 @@ namespace DotnetCrud.Services
         private readonly IUserRepository _repository = repository;
         private readonly IConfiguration _configuration = configuration;
 
-        public async Task<PagedResponse<User>> GetUsersAsync(UserFilter filter)
+        public async Task<PagedResponse<UserView>> GetUsersAsync(UserFilter filter)
         {
             var items = await _repository.GetAllAsync(filter);
             var count = await _repository.CountAllAsync();
-            return new PagedResponse<User>
+            return new PagedResponse<UserView>
             {
                 Items = items.ToList(),
                 TotalElements = count
             };
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<UserView> GetUserByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
         }
@@ -47,11 +48,7 @@ namespace DotnetCrud.Services
         public async Task<User> LoginUserAsync(string username, string password)
         {
             var user = await _repository.GetUserByUsernameAsync(username);
-            // if (user == null || !VerifyPassword(user.PasswordHash, password))
-            // {
-            //     return null;
-            // }
-            if (user == null || user.PasswordHash != password)
+            if (user == null || !VerifyPassword(user.PasswordHash, password))
             {
                 return null;
             }
@@ -67,7 +64,7 @@ namespace DotnetCrud.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-            new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.Username)
                     // Add more claims if needed
                 }),
                 Expires = DateTime.UtcNow.AddDays(1), // Token expiration time
@@ -81,6 +78,21 @@ namespace DotnetCrud.Services
         private bool VerifyPassword(string storedPasswordHash, string password)
         {
             return BCrypt.Net.BCrypt.Verify(password, storedPasswordHash);
+        }
+
+        public async Task<bool> UserExistsAsync(string username)
+        {
+            var user = await _repository.GetUserByUsernameAsync(username);
+            return user != null;
+        }
+
+        public bool IsValidPassword(string password)
+        {
+            if (password.Length < 8) return false;
+            if (!Regex.IsMatch(password, @"[A-Z]")) return false;
+            if (!Regex.IsMatch(password, @"[0-9]")) return false;
+            if (!Regex.IsMatch(password, @"[\W]")) return false;
+            return true;
         }
     }
 }

@@ -5,8 +5,8 @@ namespace DotnetCrud.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllAsync(UserFilter filter);
-        Task<User> GetByIdAsync(int id);
+        Task<IEnumerable<UserView>> GetAllAsync(UserFilter filter);
+        Task<UserView> GetByIdAsync(int id);
         Task<User> GetUserByUsernameAsync(string username);
         Task<int> AddAsync(User entity);
         Task<int> UpdateAsync(User entity);
