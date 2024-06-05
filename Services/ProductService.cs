@@ -38,5 +38,29 @@ namespace DotnetCrud.Services
         {
             return await _repository.DeleteAsync(id);
         }
+
+        public async Task<string> SaveImageAsync(IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+            {
+                return null;
+            }
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+
+            return $"/images/{fileName}";
+        }
     }
 }

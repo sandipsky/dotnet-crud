@@ -1,11 +1,39 @@
 {
   "Version": 1,
-  "Hash": "qpgECSJu1cOYeHrenXtb5UZ8ZiqfdHLMgRq2MVYbzO0=",
+  "Hash": "fYkx0/fl0y5KXK7Xq6ucSpf18gmjY0KblFi6MN5E/CM=",
   "Source": "dotnet-crud",
   "BasePath": "_content/dotnet-crud",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "dotnet-crud\\wwwroot",
+      "Source": "dotnet-crud",
+      "ContentRoot": "D:\\Projects\\Sandip\\dotnet-crud\\wwwroot\\",
+      "BasePath": "_content/dotnet-crud",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Projects\\Sandip\\dotnet-crud\\wwwroot\\images\\08a2c3c7-2aa0-4201-a7e3-681e118a4865.jpg",
+      "SourceId": "dotnet-crud",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\Sandip\\dotnet-crud\\wwwroot\\",
+      "BasePath": "_content/dotnet-crud",
+      "RelativePath": "images/08a2c3c7-2aa0-4201-a7e3-681e118a4865.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\08a2c3c7-2aa0-4201-a7e3-681e118a4865.jpg"
+    }
+  ]
 }

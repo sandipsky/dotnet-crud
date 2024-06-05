@@ -26,7 +26,7 @@ namespace DotnetCrud.Data
                     CategoryId INTEGER NOT NULL,
                     BrandId INTEGER NOT NULL,
                     Description TEXT,
-                    ImagePath TEXT,
+                    Image TEXT,
                     IsFeatured BOOLEAN,
                     FOREIGN KEY (CategoryId) REFERENCES Categories(Id),
                     FOREIGN KEY (BrandId) REFERENCES Brands(Id)

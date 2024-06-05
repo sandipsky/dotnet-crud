@@ -35,21 +35,42 @@ namespace DotnetCrud.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateProduct(Product product)
+        public async Task<ActionResult> CreateProduct([FromForm] ProductForm productDto)
         {
+            var imageUrl = await _productService.SaveImageAsync(productDto.Image);
+            var product = new Product
+            {
+                Name = productDto.Name,
+                Price = productDto.Price,
+                Description = productDto.Description,
+                IsFeatured = productDto.IsFeatured,
+                CategoryId = productDto.CategoryId,
+                BrandId = productDto.BrandId,
+                Image = imageUrl
+            };
+
             await _productService.CreateProductAsync(product);
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProduct(int id, Product product)
+        public async Task<ActionResult> UpdateProduct(int id, [FromForm] ProductForm productDto)
         {
-            if (id != product.Id)
+
+            var imageUrl = await _productService.SaveImageAsync(productDto.Image);
+            var product = new Product
             {
-                return BadRequest();
-            }
+                Name = productDto.Name,
+                Price = productDto.Price,
+                Description = productDto.Description,
+                IsFeatured = productDto.IsFeatured,
+                CategoryId = productDto.CategoryId,
+                BrandId = productDto.BrandId,
+                Image = imageUrl
+            };
+
             await _productService.UpdateProductAsync(product);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]

@@ -10,5 +10,6 @@ namespace DotnetCrud.Services
         Task<int> CreateProductAsync(Product product);
         Task<int> UpdateProductAsync(Product product);
         Task<int> DeleteProductAsync(int id);
+        Task<string> SaveImageAsync(IFormFile image);
     }
 }

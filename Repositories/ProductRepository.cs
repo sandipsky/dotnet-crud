@@ -15,7 +15,7 @@ namespace DotnetCrud.Repositories
 
             var sql = @"
                 SELECT 
-                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName, p.BrandId, b.Name as BrandName
+                    p.Id, p.Name, p.Price, p.Description, p.IsFeatured, p.Image, p.CategoryId, c.Name as CategoryName, p.BrandId, b.Name as BrandName
                 FROM 
                     Products p
                 INNER JOIN 
@@ -74,7 +74,7 @@ namespace DotnetCrud.Repositories
             using var connection = _context.CreateConnection();
             var query = @"
                 SELECT 
-                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName, p.BrandId, b.Name as BrandName
+                    p.Id, p.Name, p.Price, p.Description, p.IsFeatured, p.Image, p.CategoryId, c.Name as CategoryName, p.BrandId, b.Name as BrandName
                 FROM 
                     Products p
                 INNER JOIN 
@@ -89,13 +89,13 @@ namespace DotnetCrud.Repositories
         public async Task<int> AddAsync(Product product)
         {
             using var connection = _context.CreateConnection();
-            return await connection.ExecuteAsync("INSERT INTO Products (Name, Price, CategoryId, BrandId) VALUES (@Name, @Price, @CategoryId, @BrandId)", product);
+            return await connection.ExecuteAsync("INSERT INTO Products (Name, Price, CategoryId, BrandId, Description, Image, IsFeatured) VALUES (@Name, @Price, @CategoryId, @BrandId, @Description, @Image, @IsFeatured)", product);
         }
 
         public async Task<int> UpdateAsync(Product product)
         {
             using var connection = _context.CreateConnection();
-            return await connection.ExecuteAsync("UPDATE Products SET Name = @Name, Price = @Price, CategoryId = @CategoryId, BrandId = @BrandId WHERE Id = @Id", product);
+            return await connection.ExecuteAsync("UPDATE Products SET Name = @Name, Price = @Price, CategoryId = @CategoryId, BrandId = @BrandId, Description = @Description, Image = @Image, IsFeatured = @IsFeatured WHERE Id = @Id", product);
         }
 
         public async Task<int> DeleteAsync(int id)
