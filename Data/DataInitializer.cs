@@ -15,12 +15,21 @@ namespace DotnetCrud.Data
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Name TEXT NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS Brands (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT NOT NULL
+                );
                 CREATE TABLE IF NOT EXISTS Products (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Name TEXT NOT NULL,
                     Price REAL NOT NULL,
                     CategoryId INTEGER NOT NULL,
-                    FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+                    BrandId INTEGER NOT NULL,
+                    Description TEXT,
+                    ImagePath TEXT,
+                    IsFeatured BOOLEAN,
+                    FOREIGN KEY (CategoryId) REFERENCES Categories(Id),
+                    FOREIGN KEY (BrandId) REFERENCES Brands(Id)
                 );
                 CREATE TABLE IF NOT EXISTS Users (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,

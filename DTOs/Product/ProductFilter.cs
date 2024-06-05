@@ -6,6 +6,7 @@ namespace DotnetCrud.DTOs
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public int? CategoryId { get; set; }
+        public int? BrandId { get; set; }
         public string SortBy { get; set; } = "name";
         public string SortOrder { get; set; } = "asc";
         public int PageIndex { get; set; } = 0;

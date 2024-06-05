@@ -15,11 +15,13 @@ namespace DotnetCrud.Repositories
 
             var sql = @"
                 SELECT 
-                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName
+                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName, p.BrandId, b.Name as BrandName
                 FROM 
                     Products p
                 INNER JOIN 
                     Categories c ON p.CategoryId = c.Id
+                INNER JOIN 
+                    Brands b ON p.BrandId = b.Id
                 WHERE 
                     1=1";
 
@@ -39,6 +41,10 @@ namespace DotnetCrud.Repositories
             {
                 sql += " AND p.CategoryId = @CategoryId";
             }
+            if (filter.BrandId.HasValue)
+            {
+                sql += " AND p.BrandId = @BrandId";
+            }
 
             sql += $" ORDER BY p.{filter.SortBy} {filter.SortOrder}";
             sql += " LIMIT @PageSize OFFSET @Offset";
@@ -53,7 +59,7 @@ namespace DotnetCrud.Repositories
                 Offset = filter.PageIndex * filter.PageSize
             };
 
-            return await connection.QueryAsync<ProductViewDTO>(sql, parameters);           
+            return await connection.QueryAsync<ProductViewDTO>(sql, parameters);
         }
 
         public async Task<int> CountAllAsync()
@@ -68,26 +74,28 @@ namespace DotnetCrud.Repositories
             using var connection = _context.CreateConnection();
             var query = @"
                 SELECT 
-                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName
+                    p.Id, p.Name, p.Price, p.CategoryId, c.Name as CategoryName, p.BrandId, b.Name as BrandName
                 FROM 
                     Products p
                 INNER JOIN 
                     Categories c ON p.CategoryId = c.Id
+                INNER JOIN 
+                    Brands b ON p.BrandId = b.Id
                 WHERE 
-                    p.Id = @Id";
+                    1=1";
             return await connection.QuerySingleOrDefaultAsync<ProductViewDTO>(query, new { Id = id });
         }
 
         public async Task<int> AddAsync(Product product)
         {
             using var connection = _context.CreateConnection();
-            return await connection.ExecuteAsync("INSERT INTO Products (Name, Price, CategoryId) VALUES (@Name, @Price, @CategoryId)", product);
+            return await connection.ExecuteAsync("INSERT INTO Products (Name, Price, CategoryId, BrandId) VALUES (@Name, @Price, @CategoryId, @BrandId)", product);
         }
 
         public async Task<int> UpdateAsync(Product product)
         {
             using var connection = _context.CreateConnection();
-            return await connection.ExecuteAsync("UPDATE Products SET Name = @Name, Price = @Price, CategoryId = @CategoryId WHERE Id = @Id", product);
+            return await connection.ExecuteAsync("UPDATE Products SET Name = @Name, Price = @Price, CategoryId = @CategoryId, BrandId = @BrandId WHERE Id = @Id", product);
         }
 
         public async Task<int> DeleteAsync(int id)
